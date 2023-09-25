@@ -2,20 +2,61 @@
 
 > inductive (intention) locking conditional state library
 
-## Abstract
+
+`ill` implements a concurrent tree-like data structure, specifically a trie, where intermediary nodes represent prefixes of larger strings. The system aims to allow concurrent read and write access to strings in the trie. There's a need for locking not just the leaves (entire strings) but also intermediary nodes (prefixes of strings). 
+
+### Invariants
+
+The main challenge is to ensure concurrent access without violating two invariants:
+
+1. The owning thread can access any part of a node's subtree without additional locks.
+2. Other threads shouldn't be blocked from independent operations on different parts of the tree.
+
+A global reader-writer lock would easily ensure the first invariant but not the second. The solution proposed is to use _intention locks_ while traversing the prefix tree. 
+
+**ill Locks:**
+
+- Intention locks are similar to reader-writer locks with multiple states.
+- States `S` (Shared) and `X` (Exclusive) are the primary states. A node in `S` or `X` implies all its descendants are similarly set.
+- Provisional intention states: `IS` (Intention to Share) and `IX` (Intention for Exclusive access) are introduced.
+  - `IS` allows a thread to continue traversing and set subsequent nodes to `IS` or `S`.
+  - `IX` allows a thread to continue traversing and set subsequent nodes to `IX` or `X`.
+  - `SIX` (Intention to Share and upgrade to IX) is mentioned but not implemented in this context.
+  
+To lock a node in shared mode, all its ancestors are set to `IS` and the node itself to `S`. For exclusive mode, all ancestors are set to `IX` and the node to `X`.
+
+**Transition Matrix for Lock States:**
+
+| Request/Holding | Unlocked | Holding X | Holding S | Holding IX | Holding IS |
+|-----------------|----------|-----------|-----------|------------|------------|
+| Request X       | Yes      | No        | No        | No         | No         |
+| Request S       | Yes      | No        | Yes       | No         | Yes        |
+| Request IX      | Yes      | No        | No        | Yes        | Yes        |
+| Request IS      | Yes      | No        | Yes       | Yes        | Yes        |
+
+>**Note**
+> This matrix shows the allowed transitions between lock states. If a transition is not allowed, the caller MUST block.
+
+### Design
+
+<!-- NOTES:
+
+- Potential bugs hide when the programmer believes a conditional (and thus the state it projects onto) means one thing when in fact it means something subtly different.
 
 State-transitions which allow interesting operational dynamics. To achieve it, we try to split all conditions apart from the state-transitions that they guard. We name each independently and combine to form real functions.
-The problem with such conditional paths within transition logic is that they add conceptual non-linearity over state semantics. Potential bugs hide when the programmer believes a conditional (and thus the state it projects onto) means one thing when in fact it means something subtly different.
-
+The problem with such conditional paths within transition logic is that they add conceptual non-linearity over state semantics. 
 - Function bodies should have no conditional paths.   
 - Never mix transitions with conditions.   
+-->
 
-Instead we rather abstract the condition and create a function modifier for this condition.    
+Abstract the condition and create a function modifier for this condition.      
 
-Explicitly enumerate all such conditionals. Logic becomes flattened into non-conditional state-transactions.   
+Explicitly enumerate all such conditionals.   
+
+Logic becomes flattened into non-conditional state-transactions.     
 
 #### Base case
-we show that there exists some state that is locked.       
+We show that there exists some state that is locked.       
 
 #### Inductive case
 Given an arbitrary locked starting state (our inductive hypothesis), we show that the state remains locked after transition.    
