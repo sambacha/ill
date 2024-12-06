@@ -2,37 +2,43 @@
 pragma solidity ^0.8.0;
 
 contract IntentionLockCOP {
-    enum LockState {Unlocked, X, S, IX, IS}
-    
+    enum LockState {
+        Unlocked,
+        X,
+        S,
+        IX,
+        IS
+    }
+
     struct Node {
         LockState state;
         address owner;
-        uint parentIndex; 
+        uint256 parentIndex;
     }
 
-    Node[] public tree; 
+    Node[] public tree;
 
-    modifier onlyOwner(uint nodeIndex) {
+    modifier onlyOwner(uint256 nodeIndex) {
         require(tree[nodeIndex].owner == msg.sender, "Not the owner");
         _;
     }
 
-    modifier canLockX(uint nodeIndex) {
+    modifier canLockX(uint256 nodeIndex) {
         require(_canLockX(tree[nodeIndex].state), "Cannot lock X");
         _;
     }
 
-    modifier canLockS(uint nodeIndex) {
+    modifier canLockS(uint256 nodeIndex) {
         require(_canLockS(tree[nodeIndex].state), "Cannot lock S");
         _;
     }
 
-    modifier canLockIX(uint nodeIndex) {
+    modifier canLockIX(uint256 nodeIndex) {
         require(_canLockIX(tree[nodeIndex].state), "Cannot lock IX");
         _;
     }
 
-    modifier canLockIS(uint nodeIndex) {
+    modifier canLockIS(uint256 nodeIndex) {
         require(_canLockIS(tree[nodeIndex].state), "Cannot lock IS");
         _;
     }
@@ -42,7 +48,7 @@ contract IntentionLockCOP {
         _;
     }
 
-    modifier isValidParent(uint parentIndex) {
+    modifier isValidParent(uint256 parentIndex) {
         require(_isValidParent(parentIndex), "Invalid parent index");
         _;
     }
@@ -67,7 +73,7 @@ contract IntentionLockCOP {
         return tree.length > 0;
     }
 
-    function _isValidParent(uint parentIndex) internal view returns (bool) {
+    function _isValidParent(uint256 parentIndex) internal view returns (bool) {
         return parentIndex < tree.length;
     }
 }

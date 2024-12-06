@@ -7,7 +7,7 @@ pragma solidity ^0.8.4;
 /// @title EchidnaTestTimeAndCaller
 contract EchidnaTestTimeAndCaller {
     bool private pass = true;
-    uint private createdAt = block.timestamp;
+    uint256 private createdAt = block.timestamp;
 
     /*
     test will fail if Echidna can call setFail()
@@ -23,18 +23,15 @@ contract EchidnaTestTimeAndCaller {
         Otherwise Echidna will not be able to call this function.
         Max block delay can be extended by specifying it in a configuration file.
         */
-        uint delay = 7 days;
+        uint256 delay = 7 days;
         require(block.timestamp >= createdAt + delay);
         pass = false;
     }
 
     // Default senders
     // Change the addresses to see the test fail
-    address[3] private senders = [
-        address(0x10000),
-        address(0x20000),
-        address(0x00a329C0648769a73afAC7F9381e08fb43DBEA70)
-    ];
+    address[3] private senders =
+        [address(0x10000), address(0x20000), address(0x00a329C0648769a73afAC7F9381e08fb43DBEA70)];
 
     address private sender = msg.sender;
 
@@ -47,7 +44,7 @@ contract EchidnaTestTimeAndCaller {
 
     // Check default senders. Sender should be one of the 3 default accounts.
     function echidna_test_sender() public view returns (bool) {
-        for (uint i; i < 3; i++) {
+        for (uint256 i; i < 3; i++) {
             if (sender == senders[i]) {
                 return true;
             }

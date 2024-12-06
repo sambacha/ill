@@ -4,38 +4,31 @@ pragma solidity ^0.8.4 <0.9.0;
 // helpers to use with require(false, D.str_concat(D.to_ascii_....)
 
 library D {
-    function str_concat(string memory _a, string memory _b)
+    function str_concat(string memory _a, string memory _b) internal pure returns (string memory _concatenatedString) {
+        return str_concat(_a, _b, "", "", "", "", "", "");
+    }
+
+    function str_concat(string memory _a, string memory _b, string memory _c)
         internal
         pure
         returns (string memory _concatenatedString)
     {
-        return str_concat(_a, _b, "", "", "", "", "", "");
-    }
-
-    function str_concat(
-        string memory _a,
-        string memory _b,
-        string memory _c
-    ) internal pure returns (string memory _concatenatedString) {
         return str_concat(_a, _b, _c, "", "");
     }
 
-    function str_concat(
-        string memory _a,
-        string memory _b,
-        string memory _c,
-        string memory _d
-    ) internal pure returns (string memory _concatenatedString) {
+    function str_concat(string memory _a, string memory _b, string memory _c, string memory _d)
+        internal
+        pure
+        returns (string memory _concatenatedString)
+    {
         return str_concat(_a, _b, _c, _d, "", "", "", "");
     }
 
-    function str_concat(
-        string memory _a,
-        string memory _b,
-        string memory _c,
-        string memory _d,
-        string memory _e
-    ) internal pure returns (string memory _concatenatedString) {
+    function str_concat(string memory _a, string memory _b, string memory _c, string memory _d, string memory _e)
+        internal
+        pure
+        returns (string memory _concatenatedString)
+    {
         return str_concat(_a, _b, _c, _d, _e, "", "", "");
     }
 
@@ -82,14 +75,7 @@ library D {
         bytes memory _bh = bytes(_h);
 
         string memory abcdefgh = new string(
-            _ba.length +
-                _bb.length +
-                _bc.length +
-                _bd.length +
-                _be.length +
-                _bf.length +
-                _bg.length +
-                _bh.length
+            _ba.length + _bb.length + _bc.length + _bd.length + _be.length + _bf.length + _bg.length + _bh.length
         );
         bytes memory babcde = bytes(abcdefgh);
         uint256 k = 0;
@@ -144,7 +130,7 @@ library D {
     function to_ascii_string(address x) internal pure returns (string memory) {
         bytes memory s = new bytes(40);
         for (uint256 i = 0; i < 20; i++) {
-            bytes1 b = bytes1(uint8(uint256(uint160(x)) / (2**(8 * (19 - i)))));
+            bytes1 b = bytes1(uint8(uint256(uint160(x)) / (2 ** (8 * (19 - i)))));
             bytes1 hi = bytes1(uint8(b) / 16);
             bytes1 lo = bytes1(uint8(b) - 16 * uint8(hi));
             s[2 * i] = char(hi);

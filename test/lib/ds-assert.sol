@@ -6,22 +6,17 @@ import "./ds-test.sol";
 //
 // @title ds-test/assert
 // @notice Extends ds-test with additional generic assertions + revert checks
-// @custom:version 2022.05 
+// @custom:version 2022.05
 // @custom:contributors Michael Pouy, Vincenzo Palazzo, Daniel Cousens, Gerasimos Maropoulos
 //
-
 contract DSAssert is DSTest {
-
-    // 
+    //
     // @custom:function assertErrorWithMessage
     // @notice Calls function and checks for matching revert message
     // @param erroringFunction to call
     // @param message to check against revert error string
     //
-    function assertErrorWithMessage(
-        function() external erroringFunction,
-        string memory message
-    ) internal {
+    function assertErrorWithMessage(function() external erroringFunction, string memory message) internal {
         try erroringFunction() {
             fail();
         } catch Error(string memory error) {
@@ -50,27 +45,25 @@ contract DSAssert is DSTest {
         }
     }
 
-
     //
-     // @custom:function assertErrorWithMessageMulti
-     // @notice Calls function and checks for matching revert message
-     // @param erroringFunction to call
-     // @param params to pass to function
-     // @param message to check against revert error string
-     //
-        function assertErrorWithMessageMulti(
-            function(uint256[] memory) external erroringFunction,
-            uint256[] memory params,
-            string memory message
-        ) internal {
-            try erroringFunction(params) {
-                fail();
-            } catch Error(string memory error) {
-                // Assert revert error matches expected message
-                assertEq(error, message);
-            }
-     }
-
+    // @custom:function assertErrorWithMessageMulti
+    // @notice Calls function and checks for matching revert message
+    // @param erroringFunction to call
+    // @param params to pass to function
+    // @param message to check against revert error string
+    //
+    function assertErrorWithMessageMulti(
+        function(uint256[] memory) external erroringFunction,
+        uint256[] memory params,
+        string memory message
+    ) internal {
+        try erroringFunction(params) {
+            fail();
+        } catch Error(string memory error) {
+            // Assert revert error matches expected message
+            assertEq(error, message);
+        }
+    }
 
     //
     // @custom:function assertErrorWithMessagePayable
@@ -94,13 +87,13 @@ contract DSAssert is DSTest {
         }
     }
 
-     // @custom:function assertEqApprox
-     // @param uint256 
-     // @param _a 
-     // @param uint256 
-     // @param _b 
-     // @param uint256 
-     // @param _tolerance 
+    // @custom:function assertEqApprox
+    // @param uint256
+    // @param _a
+    // @param uint256
+    // @param _b
+    // @param uint256
+    // @param _tolerance
     function assertEqApprox(uint256 _a, uint256 _b, uint256 _tolerance) internal {
         uint256 a = _a;
         uint256 b = _b;
@@ -116,5 +109,4 @@ contract DSAssert is DSTest {
             fail();
         }
     }
-    
 }
