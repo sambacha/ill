@@ -3,7 +3,6 @@ pragma solidity ^0.8.0;
 
 // draft contract for testing against ill
 contract ITC {
-
     /**
      * @dev Represents a node in the interval tree.
      * @param begin The start of the interval.
@@ -39,7 +38,7 @@ contract ITC {
     function fork(address nodeAddress) public {
         Node storage node = nodes[nodeAddress];
         require(node.left == address(0) && node.right == address(0), "Node already forked");
-    
+
         uint256 mid = (node.begin + node.end) / 2;
 
         address leftAddress = address(uint160(nodeAddress) + 1); // Create a new unique address for the left node.
@@ -59,7 +58,7 @@ contract ITC {
     function join(address parentNodeAddress) public {
         Node storage parentNode = nodes[parentNodeAddress];
         require(parentNode.left != address(0) && parentNode.right != address(0), "Node not forked");
-    
+
         delete nodes[parentNode.left];
         delete nodes[parentNode.right];
 

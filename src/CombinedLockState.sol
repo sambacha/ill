@@ -9,13 +9,19 @@
  *    `lockX`, `lockS`, `lockIX`, and `lockIS` 
  *  into a single `lock` function that takes the `LockState` as a parameter.
  *
- */ 
+ */
 
 pragma solidity ^0.8.19;
 
 contract IntentionLock {
-    enum LockState {Unlocked, X, S, IX, IS}
-    
+    enum LockState {
+        Unlocked,
+        X,
+        S,
+        IX,
+        IS
+    }
+
     struct Node {
         LockState state;
         address owner;
@@ -42,9 +48,10 @@ contract IntentionLock {
     }
 
     function _canLockIS(LockState currentState) private pure returns (bool) {
-        return currentState == LockState.Unlocked || currentState == LockState.S || currentState == LockState.IS || currentState == LockState.IX;
+        return currentState == LockState.Unlocked || currentState == LockState.S || currentState == LockState.IS
+            || currentState == LockState.IX;
     }
-    
+
     function _isRootNodeExist() private view returns (bool) {
         return tree.length > 0;
     }
@@ -91,11 +98,7 @@ contract IntentionLock {
 
     // Transitions
     function _addRootNode() private {
-        Node memory newNode = Node({
-            state: LockState.Unlocked,
-            owner: address(0),
-            parentIndex: 0 
-        });
+        Node memory newNode = Node({state: LockState.Unlocked, owner: address(0), parentIndex: 0});
         tree.push(newNode);
         emit NodeAdded(0, 0);
 
@@ -104,11 +107,7 @@ contract IntentionLock {
     }
 
     function _addChildNode(uint256 parentIndex) private {
-        Node memory newNode = Node({
-            state: LockState.Unlocked,
-            owner: address(0),
-            parentIndex: parentIndex
-        });
+        Node memory newNode = Node({state: LockState.Unlocked, owner: address(0), parentIndex: parentIndex});
         tree.push(newNode);
         uint256 newNodeIndex = tree.length - 1;
         emit NodeAdded(newNodeIndex, parentIndex);
