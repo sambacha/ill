@@ -1,5 +1,4 @@
-// SPDX-License-Identifier: COPYRIGHT
-// SPDX-License-Identifier: NOT FOR USE
+/// SPDX-License-Identifier: UPL-1.0
 pragma solidity ^0.8.0;
 
 // draft contract for testing against ill
@@ -72,7 +71,7 @@ contract ITC {
      * @dev Increments the end of a node's interval.
      * @param nodeAddress The address (identifier) of the node whose interval end is to be incremented.
      */
-    function event(address nodeAddress) public {
+    function incrementNodeAddress(address nodeAddress) public {
         Node storage node = nodes[nodeAddress];
         require(node.end < type(uint256).max, "Max value reached");
         node.end += 1;

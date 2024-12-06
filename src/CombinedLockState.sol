@@ -1,4 +1,4 @@
-/// SPDX-License-Identifier: Copyright 2023, Sam Bacha
+// SPDX-License-Identifier: MIT
 
 /// @title Intention Locking Library
 /// @author Sam Bacha
@@ -151,13 +151,13 @@ contract IntentionLock {
 
     function lock(uint256 nodeIndex, LockState lockState) public {
         if (lockState == LockState.X) {
-            canLockX(nodeIndex);
+            require(_canLockX(tree[nodeIndex].state), "Node is not in a state that allows X locking");
         } else if (lockState == LockState.S) {
-            canLockS(nodeIndex);
+            require(_canLockS(tree[nodeIndex].state), "Node is not in a state that allows S locking");
         } else if (lockState == LockState.IX) {
-            canLockIX(nodeIndex);
+            require(_canLockIX(tree[nodeIndex].state), "Node is not in a state that allows IX locking");
         } else if (lockState == LockState.IS) {
-            canLockIS(nodeIndex);
+            require(_canLockIS(tree[nodeIndex].state), "Node is not in a state that allows IS locking");
         }
         _lockNode(nodeIndex, lockState);
     }

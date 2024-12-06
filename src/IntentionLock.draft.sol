@@ -85,8 +85,8 @@ contract TestableIntentionLock {
     /// @notice Public function to add a root node to the tree.
     /// @dev Emits a NodeAdded event if successful.
     /// @return The index of the newly added root node.
-    function addRootNode() public rootNodeDoesNotExist {
-        _addRootNode();
+    function addRootNode() public rootNodeDoesNotExist returns (uint) {
+        return _addRootNode();
     }
 
     /// @notice Internal function to add a child node with a specified parent.
@@ -94,8 +94,16 @@ contract TestableIntentionLock {
     /// Emits a NodeAdded event.
     /// @param parentIndex Index of the parent node.
     /// @return The index of the newly added child node.
-    function addChildNode(uint parentIndex) public isValidParent(parentIndex) {
-        _addChildNode(parentIndex);
+    function _addChildNode(uint parentIndex) private returns (uint) {
+        // TODO: Implement _addChildNode
+    }
+
+    /// @notice Public function to add a child node with a specified parent.
+    /// @dev Emits a NodeAdded event if successful.
+    /// @param parentIndex Index of the parent node.
+    /// @return The index of the newly added child node.
+    function addChildNode(uint parentIndex) public isValidParent(parentIndex) returns (uint) {
+        return _addChildNode(parentIndex);
     }
 
     /// @notice Internal function to lock a node with a specified lock state.
@@ -128,9 +136,35 @@ contract TestableIntentionLock {
         _unlockNode(nodeIndex);
     }
 
-// End of Contract
+    function _unlockNode(uint nodeIndex) private {
+        // TODO: Implement _unlockNode
+    }
 
+    function _canLockX(LockState state) private pure returns (bool) {
+        // TODO: Implement _canLockX
+    }
+
+    function _canLockS(LockState state) private pure returns (bool) {
+        // TODO: Implement _canLockS
+    }
+
+    function _canLockIX(LockState state) private pure returns (bool) {
+        // TODO: Implement _canLockIX
+    }
+
+    function _canLockIS(LockState state) private pure returns (bool) {
+        // TODO: Implement _canLockIS
+    }
+
+    function _isRootNodeExist() private view returns (bool) {
+        // TODO: Implement _isRootNodeExist
+    }
+
+    function _isValidParent(uint parentIndex) private view returns (bool) {
+        // TODO: Implement _isValidParent
+    }
 }
+// End of Contract
 /**
 
      2023-09-17 18:28:31-07:00

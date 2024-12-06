@@ -46,4 +46,28 @@ contract IntentionLockCOP {
         require(_isValidParent(parentIndex), "Invalid parent index");
         _;
     }
+
+    function _canLockX(LockState state) internal pure returns (bool) {
+        return state == LockState.Unlocked;
+    }
+
+    function _canLockS(LockState state) internal pure returns (bool) {
+        return state == LockState.Unlocked || state == LockState.S;
+    }
+
+    function _canLockIX(LockState state) internal pure returns (bool) {
+        return state == LockState.Unlocked || state == LockState.IX;
+    }
+
+    function _canLockIS(LockState state) internal pure returns (bool) {
+        return state == LockState.Unlocked || state == LockState.IS || state == LockState.S;
+    }
+
+    function _isRootNodeExist() internal view returns (bool) {
+        return tree.length > 0;
+    }
+
+    function _isValidParent(uint parentIndex) internal view returns (bool) {
+        return parentIndex < tree.length;
+    }
 }

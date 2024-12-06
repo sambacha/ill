@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: COPYRIGHT 2023 - Sam Bacha
+// SPDX-License-Identifier: GPL-3.0
 
 /// @title Intention Locking Library
 /// @author Sam Bacha
@@ -7,7 +7,7 @@
 //     explicit types (uint = unit256)
 //     Diagram Locking Mechanics
 
-pragma solidity 0.8.21;
+pragma solidity ^0.8.21;
 
 contract IntentionLock {
     enum LockState {Unlocked, X, S, IX, IS}
